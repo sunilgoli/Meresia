@@ -1,5 +1,0 @@
-{
-	"message": "Invalid Call.",
-	"status": 404,
-	"data": {}
-},
