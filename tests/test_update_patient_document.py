@@ -4,8 +4,8 @@ import hashlib
 import json
 
 
-url = 'http://127.0.0.1:8002/update/doctor/basic'
-# url = 'http://139.59.224.188:8002/update/doctor/basic'
+url = 'http://127.0.0.1:8002/update/patient/document'
+# url = 'http://139.59.224.188:8002/update/patient/document'
 
 headers = {
     'X-ACCESS-KEY': '85bfbb2e88494e3b7dcd73b678f3928999724b96ecbfb336b2f2e6fa1ff56e85',

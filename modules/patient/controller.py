@@ -16,7 +16,7 @@ class Patient(object):
 	def register(self, data):
 		try:
 			u = User()
-			print(u.is_duplicate("email", data["email"]))
+			# print(u.is_duplicate("email", data["email"]))
 			if u.is_duplicate("email", data["email"]):
 				return {"status": False, "message": "Given email is already registered with us."}
 
@@ -34,6 +34,7 @@ class Patient(object):
 			pat.name = data["name"]
 			pat.email_id = data["email"]
 			pat.mobile = data["mobile"]
+			pat.status = True
 			pat.created_at = datetime.now()
 			pat.modified_at = datetime.now()
 			pat.save()
@@ -51,26 +52,27 @@ class Patient(object):
 			pat_ins.name = data["name"]
 			pat_ins.gender = data["gender"]
 			pat_ins.dob = data["dob"]
+			pat_ins.status = True
 			pat_ins.blood_group = data["blood_group"]
 			pat_ins.modified_at = datetime.now()
 			pat_ins.save()
 
 			# Language update
 			lan = Language()
-			languages = object_to_dict_with_key("lan_type", lan.list(doc_ins.id))
+			languages = object_to_dict_with_key("lan_type", lan.list(pat_ins.id))
 
 			for language in data["languages"]:
 				if language in languages:
 					del languages[language]
 				else:
 					new_lan = Language()
-					new_lan.doctor_id = doc_ins.id
+					new_lan.patient_id = pat_ins.id
 					new_lan.lan_type = language
 					new_lan.created_at = datetime.now()
 					new_lan.modified_at = datetime.now()
 					new_lan.save()
 
-			# Deleting languages which are deselected by doctor
+			# Deleting languages which are deselected by Patient
 			for key,obj in languages.items():
 				lan.delete(obj)
 
@@ -85,12 +87,12 @@ class Patient(object):
 			pat = PatModel()
 			pat_ins = pat.info(instance.email_id)
 
-			# Update doctor's email and mobile for login
+			# Update patient's email and mobile for login
 			instance.email_id = data["email"]
 			instance.mobile = data["mobile"]
 			instance.save()
 
-			# Update doctor's email and mobile
+			# Update patient's email and mobile
 			pat_ins.email_id = data["email"]
 			pat_ins.mobile = data["mobile"]
 			pat_ins.save()
@@ -138,11 +140,11 @@ class Patient(object):
 
 			doc = Document()
 			doc_inst = doc.instance(pat_ins.id, data["doc_type"])
-			if doc_ins:
+			if doc_inst:
 				# Update document info
-				doc_ins.details = data["details"]
-				doc_ins.modified_at = datetime.now()
-				doc_ins.save()
+				doc_inst.details = data["details"]
+				doc_inst.modified_at = datetime.now()
+				doc_inst.save()
 			else:
 				# Save document info
 				doc.patient_id = pat_ins.id
@@ -173,7 +175,6 @@ class Patient(object):
 		try:
 			pat = PatModel()
 			pat_ins = pat.info(instance.email_id)
-
 			doc = Document()
 			return object_to_list_of_dicts(["doc_type", "details"], doc.list(pat_ins.id))
 		except Exception as e:
