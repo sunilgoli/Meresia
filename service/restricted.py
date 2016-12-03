@@ -514,5 +514,11 @@ class Service(object):
 	def appointment(self, **params):
 		return {"status": 200, "data": {}, "message": "appointment"}
 
+	def appointments(self, **params):
+		return {"status": 200, "data": {}, "message": "appointment"}
+
+	def save_appointment(self, **params):
+		return {"status": 200, "data": {}, "message": "appointment"}
+
 	def profile(self, **params):
 		return {"status": 200, "data": {}, "message": "Profile"}

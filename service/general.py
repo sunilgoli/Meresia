@@ -6,11 +6,36 @@ from modules.patient.controller import Patient
 from modules.user.controller import User
 from libraries.util import hash256, random_hash
 from libraries.util import validate_password, validate_email
+from collections import OrderedDict
 
 class Common(object):
 
 	def test(self):
 		return {"status": 200, "data": {}, "message": "I'm working.", "access-key": random_hash()}
+
+	def info(self):
+		response = {"status": 200, "data": [], "message": "List of API's available", "access-key": random_hash()}
+
+		response["data"].append(OrderedDict({
+			"name": "Response",
+			"description": "Basic API response structure.",
+			"header": "Access-key which is used for next transaction.",
+			"structure": {
+				"status": "Http status code. Ex: [200, 400, ...]",
+				"data": "DICT {} or LIST [] of info.",
+				"message": "Description/message of the response.",
+			}
+		}))
+
+		response["data"].append(OrderedDict({
+			"name": "API list",
+			"description": "List of all API's with their description.",
+			"endpoint": "/api",
+			"method": "GET",
+			"arguments": {},
+			"response": {}
+		}))
+		return response
 
 	def patient_register(self, **params):
 		response = {"status": 400, "data": {}, "message": "Unable to register patient.", "access-key": random_hash()}
